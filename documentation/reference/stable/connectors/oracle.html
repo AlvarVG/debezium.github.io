@@ -329,6 +329,9 @@
           <a href="/documentation/reference/3.4/index.html">3.4</a>
         </li>
         <li class="version">
+          <a href="/documentation/reference/3.5/index.html">3.5</a>
+        </li>
+        <li class="version">
           <a href="/documentation/reference/3.3/index.html">3.3</a>
         </li>
         <li class="version">
@@ -392,6 +395,7 @@
         <div class="version-menu">
                         <a class="version" href="/documentation//reference/connectors/oracle.html" data-hash="true">nightly</a>
                         <a class="version is-current" href="/reference/stable/connectors/oracle.html" data-hash="true">3.4</a>
+                        <a class="version" href="/documentation//reference/3.5/connectors/oracle.html" data-hash="true">3.5</a>
                         <a class="version" href="/documentation//reference/3.3/connectors/oracle.html" data-hash="true">3.3</a>
                         <a class="version" href="/documentation//reference/3.2/connectors/oracle.html" data-hash="true">3.2</a>
                         <a class="version" href="/documentation//reference/3.1/connectors/oracle.html" data-hash="true">3.1</a>
@@ -2597,7 +2601,7 @@ The message contains a logical representation of the table schema.</p>
   },
   "payload": {
     "source": {
-      "version": "3.4.0.Final",
+      "version": "3.4.1.Final",
       "connector": "oracle",
       "name": "server1",
       "ts_ms": 1588252618953,
@@ -3906,7 +3910,7 @@ This field is only present when using the LogMiner connection adapter.</p>
             "EMAIL": "annek@noanswer.org"
         },
         "source": {
-            "version": "3.4.0.Final",
+            "version": "3.4.1.Final",
             "name": "server1",
             "ts_ms": 1520085154000,
             "ts_us": 1520085154000000,
@@ -4007,7 +4011,7 @@ You can use the <a href="../configuration/avro.html#avro-serialization" class="x
             "EMAIL": "anne@example.com"
         },
         "source": {
-            "version": "3.4.0.Final",
+            "version": "3.4.1.Final",
             "name": "server1",
             "ts_ms": 1520085811000,
             "ts_us": 1520085811000000,
@@ -4110,7 +4114,7 @@ The <code>schema</code> portion of the <em>delete</em> event is identical to the
         },
         "after": null,
         "source": {
-            "version": "3.4.0.Final",
+            "version": "3.4.1.Final",
             "name": "server1",
             "ts_ms": 1520085153000,
             "ts_us": 1520085153000000,
@@ -4187,7 +4191,7 @@ The message key is <code>null</code> in this case, the message value looks like 
         "before": null,
         "after": null,
         "source": { <i class="conum" data-value="1"></i><b>(1)</b>
-            "version": "3.4.0.Final",
+            "version": "3.4.1.Final",
             "connector": "oracle",
             "name": "oracle_server",
             "ts_ms": 1638974535000,
@@ -5701,15 +5705,15 @@ Because the retention policy that is configured for each destination might diffe
 <td class="content">
 <div class="paragraph">
 <p>When using the Debezium Oracle connector in an environment where the standby uses a different archive destination name than the primary instance, the <code>archive.destination.name</code> property can include a comma-separated list of destination names.
-The values should be ordered by preference as the Debezium connector will use the first destination that is <code>LOCAL</code> and <code>VALID</code>.
+The values should be ordered by preference as the Debezium connector will use the destinations to collect logs, and the order to define the log precedence.
 This is useful to minimize the reconfiguration necessary when the standby becomes the new primary during a failover scenario.</p>
 </div>
 <div class="paragraph">
 <p>For example, if the destination for the primary is <code>LOG_ARCHIVE_DEST_2</code> and the destination for the standby is <code>LOG_ARCHIVE_DEST_5</code>, set the <code>archive.destination.name</code> property to <code>LOG_ARCHIVE_DEST_2,LOG_ARCHIVE_DEST_5</code>.
-This will prioritize destination #2 and it will be used on the primary and destination #5 will be used on the standby.</p>
+When a failover occurs and the standby becomes the primary, Debezium will prioritize destination #2, falling back to destination #5 to pickup any logs that existed prior to the standby being promoted.</p>
 </div>
 <div class="paragraph">
-<p>If the destination for CDC is the same for both the primary and standby instances, using a single value is sufficient.
+<p>If the archive destination is the same for both the primary and standby instances, using a single destination name value is sufficient.
 In fact, the property is only required if either instance has more than one archive destination that is both <code>LOCAL</code> and <code>VALID</code>.</p>
 </div>
 </td>
@@ -6101,7 +6105,7 @@ For more information, see <a href="https://issues.redhat.com/browse/DBZ-8034">DB
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>Download the Debezium <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-oracle/3.4.0.Final/debezium-connector-oracle-3.4.0.Final-plugin.tar.gz">Oracle connector plug-in archive</a>.</p>
+<p>Download the Debezium <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-oracle/3.4.1.Final/debezium-connector-oracle-3.4.1.Final-plugin.tar.gz">Oracle connector plug-in archive</a>.</p>
 </li>
 <li>
 <p>Extract the files into your Kafka Connect environment.</p>
@@ -11680,6 +11684,24 @@ An example of an ORA-25191 exception might look like this:</p>
 As a workaround, the include/exclude configuration options can be adjusted to prevent the connector from accessing such tables.</p>
 </div>
 </dd>
+<dt class="hdlist1"><strong>What causes ORA-01013 and how can I resolve it?</strong></dt>
+<dd>
+<p>When a query runs for too long, the Debezium Oracle connector might report the following exception:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">ORA-01013: user requested cancel of current operation</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Debezium Oracle connector provides a configuration option, <a href="#oracle-property-database-query-timeout-ms"><code>database.query.timeout.ms</code></a>, which specifies how long a query can execute before it is canceled.
+Configuring this timeout prevents the connector from allocating resources to queries for too long, which can degrade database performance.
+In most circumstances, the default of ten minutes provides a reasonable execution time while guarding against excessive database resource consumption.</p>
+</div>
+<div class="paragraph">
+<p>You can increase the default value to provide a higher threshold before queries are canceled, particularly if the exception occurs frequently.
+You can also set the value to <code>0</code> to disable query timeouts and permit all queries to run until they return results.</p>
+</div>
+</dd>
 <dt class="hdlist1"><strong>How to solve SAX feature external-general-entities not supported</strong></dt>
 <dd>
 <p>Debezium 2.4 introduced support for Oracle&#8217;s <code>XMLTYPE</code> column type.</p>
@@ -11742,7 +11764,7 @@ By setting this to <code>true</code>, the connector will no longer treat all zer
 
 <div id="toc-rightbar"></div>    <footer class="footer">
         <div class="wrapper">
-            <div class="copyright">Copyright &copy; 2025 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/ffe0012ac006b3a7327742603c7f77757c241ea6">ffe0012a</a></span>)
+            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/716b5099fbca5904e57c971d74e3edaa09682025">716b5099</a></span>)
             
         </div>
     </footer>

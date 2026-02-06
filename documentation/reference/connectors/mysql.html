@@ -329,6 +329,9 @@
           <a href="/documentation/reference/3.4/index.html">3.4</a>
         </li>
         <li class="version">
+          <a href="/documentation/reference/3.5/index.html">3.5</a>
+        </li>
+        <li class="version">
           <a href="/documentation/reference/3.3/index.html">3.3</a>
         </li>
         <li class="version">
@@ -392,6 +395,7 @@
         <div class="version-menu">
                         <a class="version is-current" href="/reference/connectors/mysql.html" data-hash="true">nightly</a>
                         <a class="version" href="/documentation//reference/stable/connectors/mysql.html" data-hash="true">3.4</a>
+                        <a class="version" href="/documentation//reference/3.5/connectors/mysql.html" data-hash="true">3.5</a>
                         <a class="version" href="/documentation//reference/3.3/connectors/mysql.html" data-hash="true">3.3</a>
                         <a class="version" href="/documentation//reference/3.2/connectors/mysql.html" data-hash="true">3.2</a>
                         <a class="version" href="/documentation//reference/3.1/connectors/mysql.html" data-hash="true">3.1</a>
@@ -777,7 +781,7 @@ The message contains a logical representation of the table schema.</p>
   "schema": { },
   "payload": {
       "source": {
-        "version": "3.4.0.Final",
+        "version": "3.5.0.Alpha1",
         "connector": "mysql",
         "name": "mysql",
         "ts_ms": 1651535750218,
@@ -3431,7 +3435,7 @@ In the preceding example, the <code>payload</code> contains a single field, <cod
       "email": "annek@noanswer.org"
     },
     "source": {
-      "version": "3.4.0.Final",
+      "version": "3.5.0.Alpha1",
       "connector": "mysql",
       "name": "mysql-server-1",
       "ts_ms": 0,
@@ -3653,7 +3657,7 @@ The source metadata provides the following information:</p>
       "email": "annek@noanswer.org"
     },
     "source": {
-      "version": "3.4.0.Final",
+      "version": "3.5.0.Alpha1",
       "name": "mysql-server-1",
       "connector": "mysql",
       "ts_ms": 1465581029100,
@@ -3840,7 +3844,7 @@ as a primary key change. For a primary key change, in place of an <code>UPDATE</
     },
     "after": null,
     "source": {
-      "version": "3.4.0.Final",
+      "version": "3.5.0.Alpha1",
       "connector": "mysql",
       "name": "mysql-server-1",
       "ts_ms": 1465581902300,
@@ -3991,7 +3995,7 @@ The message value resembles the following example:</p>
     "schema": { ... },
     "payload": {
         "source": {
-            "version": "3.4.0.Final",
+            "version": "3.5.0.Alpha1",
             "name": "mysql-server-1",
             "connector": "mysql",
             "name": "mysql-server-1",
@@ -5587,7 +5591,7 @@ To enable the connector to consume <strong>UPDATE</strong> events, this variable
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>Download the Debezium <a href="https://central.sonatype.com/repository/maven-snapshots/io/debezium/debezium-connector-mysql/3.5.0-SNAPSHOT/debezium-connector-mysql-3.5.0-20260114.073252-102-plugin.tar.gz">MySQL connector plug-in</a>.</p>
+<p>Download the Debezium <a href="https://central.sonatype.com/repository/maven-snapshots/io/debezium/debezium-connector-mysql/3.5.0-SNAPSHOT/debezium-connector-mysql-3.5.0-20260206.120507-194-plugin.tar.gz">MySQL connector plug-in</a>.</p>
 </li>
 <li>
 <p>Extract the files into your Kafka Connect environment.</p>
@@ -7158,6 +7162,51 @@ You can define tags to identify particular application instances, environments, 
 </div>
 </dd>
 </dl>
+</div>
+<div id="mysql-property-custom-sanitize-pattern" class="dlist">
+<dl>
+<dt class="hdlist1"><a href="#mysql-property-custom-sanitize-pattern"><code>custom.sanitize.pattern</code></a></dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Default value</dt>
+<dd>
+<p><code>.*secret$|.*password$|.*sasl\.jaas\.config$|.*basic\.auth\.user\.info|.*registry\.auth\.client-secret</code></p>
+</dd>
+<dt class="hdlist1">Description</dt>
+<dd>
+<p>An optional regular expression that specifies a custom pattern for masking sensitive configuration keys.</p>
+<div class="paragraph">
+<p>By default, Debezium masks the value of configuration keys that match a predefined pattern for commonly known sensitive properties such as passwords and authentication tokens.
+To customize the way that the connector masks configuration key values, set this property to a regular expression that matches specific configuration key values that you want to mask.</p>
+</div>
+<div class="paragraph">
+<p>For example, to mask keys the contain the strings <code>api.key</code> or <code>token</code>, set this property to the following value:
+<code>"custom.sanitize.pattern": ".<strong>api\\.key.</strong>\\|.<strong>token.</strong>"</code></p>
+</div>
+<div class="paragraph">
+<p>If you set this property for the connector, Debezium masks any matching instances of configuration key values that it returns for display, logging, or in response to API calls.
+A string of asterisks replaces the original values, for example,  <code>********</code>.</p>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The pattern that you specify for the <code>custom.sanitize.pattern</code> property overrides the default Debezium masking pattern; the specified value does not extend or augment the default pattern.</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div id="mysql-property-database-initial-statements" class="dlist">
 <dl>
@@ -10043,7 +10092,7 @@ If the snapshot is disabled, the connector fails with an error.</p>
 
 <div id="toc-rightbar"></div>    <footer class="footer">
         <div class="wrapper">
-            <div class="copyright">Copyright &copy; 2025 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/dd69e1ab4d1cddd027b8bd4ee859326a11fc8f86">dd69e1ab</a></span>)
+            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/95c5504c5a7147d9f60011fc1dde5ecec47d3776">95c5504c</a></span>)
             
         </div>
     </footer>
