@@ -777,7 +777,7 @@ The message contains a logical representation of the table schema.</p>
   "schema": { },
   "payload": {
       "source": {
-        "version": "3.5.0.Alpha1",
+        "version": "3.5.0.Beta1",
         "connector": "mariadb",
         "name": "mariadb",
         "ts_ms": 1651535750218,
@@ -3414,7 +3414,7 @@ In the preceding example, the <code>payload</code> contains a single field, <cod
       "email": "annek@noanswer.org"
     },
     "source": {
-      "version": "3.5.0.Alpha1",
+      "version": "3.5.0.Beta1",
       "connector": "mariadb",
       "name": "mariadb-server-1",
       "ts_ms": 0,
@@ -3639,7 +3639,7 @@ The source metadata provides the following information:</p>
       "email": "annek@noanswer.org"
     },
     "source": {
-      "version": "3.5.0.Alpha1",
+      "version": "3.5.0.Beta1",
       "name": "mariadb-server-1",
       "connector": "mariadb",
       "ts_ms": 1465581029100,
@@ -3829,7 +3829,7 @@ as a primary key change. For a primary key change, in place of an <code>UPDATE</
     },
     "after": null,
     "source": {
-      "version": "3.5.0.Alpha1",
+      "version": "3.5.0.Beta1",
       "connector": "mariadb",
       "name": "mariadb-server-1",
       "ts_ms": 1465581902300,
@@ -3983,7 +3983,7 @@ The message value resembles the following example:</p>
     "schema": { ... },
     "payload": {
         "source": {
-            "version": "3.5.0.Alpha1",
+            "version": "3.5.0.Beta1",
             "name": "mariadb-server-1",
             "connector": "mariadb",
             "name": "mariadb-server-1",
@@ -5472,7 +5472,7 @@ To enable the connector to consume <strong>UPDATE</strong> events, this variable
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>Download the Debezium <a href="https://central.sonatype.com/repository/maven-snapshots/io/debezium/debezium-connector-mariadb/3.5.0-SNAPSHOT/debezium-connector-mariadb-3.5.0-20260206.120507-195-plugin.tar.gz">MariaDB connector plug-in</a>.</p>
+<p>Download the Debezium <a href="https://central.sonatype.com/repository/maven-snapshots/io/debezium/debezium-connector-mariadb/3.5.0-SNAPSHOT/debezium-connector-mariadb-3.5.0-20260310.060021-321-plugin.tar.gz">MariaDB connector plug-in</a>.</p>
 </li>
 <li>
 <p>Extract the files into your Kafka Connect environment.</p>
@@ -9263,6 +9263,28 @@ Updates every 10,000 rows scanned and upon completing a table.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="connectors-snaps-metric-tablechunkcounts_mariadb"></a><a href="#connectors-snaps-metric-tablechunkcounts_mariadb"><code>TableChunkCounts</code></a></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>Map&lt;String, Long&gt;</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Map containing the number of chunks for each table in the snapshot when using chunk-based multithreaded snapshots.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="connectors-snaps-metric-tablechunkscompletedcounts_mariadb"></a><a href="#connectors-snaps-metric-tablechunkscompletedcounts_mariadb"><code>TableChunksCompletedCounts</code></a></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>Map&lt;String, Long&gt;</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Map containing the number of chunks that have completed for each table in the snapshot when using chunk-based multithreaded snapshots.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="connectors-snaps-metric-maxqueuesizeinbytes_mariadb"></a><a href="#connectors-snaps-metric-maxqueuesizeinbytes_mariadb"><code>MaxQueueSizeInBytes</code></a></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -9916,7 +9938,7 @@ If the snapshot is disabled, the connector fails with an error.</p>
 
 <div id="toc-rightbar"></div>    <footer class="footer">
         <div class="wrapper">
-            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/95c5504c5a7147d9f60011fc1dde5ecec47d3776">95c5504c</a></span>)
+            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/f480868fe9ed9c4d026ea84db4dc26faa71e3e62">f480868f</a></span>)
             
         </div>
     </footer>

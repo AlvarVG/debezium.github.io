@@ -2533,7 +2533,7 @@ The message contains a logical representation of the table schema.</p>
   },
   "payload": {
     "source": {
-      "version": "3.5.0.Alpha1",
+      "version": "3.5.0.Beta1",
       "connector": "db2",
       "name": "db2",
       "ts_ms": 0,
@@ -3305,7 +3305,7 @@ The event value&#8217;s payload varies according to the event type:</p>
       "EMAIL": "john.doe@example.org"
     },
     "source": {  <i class="conum" data-value="8"></i><b>(8)</b>
-      "version": "3.5.0.Alpha1",
+      "version": "3.5.0.Beta1",
       "connector": "db2",
       "name": "myconnector",
       "ts_ms": 1559729468470,
@@ -3500,7 +3500,7 @@ Here is an example of a change event value in an event that the connector genera
       "EMAIL": "noreply@example.org"
     },
     "source": {  <i class="conum" data-value="3"></i><b>(3)</b>
-      "version": "3.5.0.Alpha1",
+      "version": "3.5.0.Beta1",
       "connector": "db2",
       "name": "myconnector",
       "ts_ms": 1559729995937,
@@ -3642,7 +3642,7 @@ The event value <code>payload</code> in a <em>delete</em> event for the sample <
     },
     "after": null,  <i class="conum" data-value="2"></i><b>(2)</b>
     "source": {  <i class="conum" data-value="3"></i><b>(3)</b>
-      "version": "3.5.0.Alpha1",
+      "version": "3.5.0.Beta1",
       "connector": "db2",
       "name": "myconnector",
       "ts_ms": 1559730445243,
@@ -4595,13 +4595,13 @@ You can adjust the values for these parameters to balance the configuration of t
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>Download the <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-db2/3.5.0.Alpha1/debezium-connector-db2-3.5.0.Alpha1-plugin.tar.gz">Debezium Db2 connector plug-in archive</a> from Maven Central.</p>
+<p>Download the <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-db2/3.5.0.Beta1/debezium-connector-db2-3.5.0.Beta1-plugin.tar.gz">Debezium Db2 connector plug-in archive</a> from Maven Central.</p>
 </li>
 <li>
 <p>Extract the JAR files into your Kafka Connect environment.</p>
 </li>
 <li>
-<p>Download the <a href="https://repo1.maven.org/maven2/com/ibm/db2/jcc/11.5.0.0/jcc-11.5.0.0.jar">JDBC driver for Db2</a> from Maven Central, and extract the downloaded driver file to the directory that contains the Debezium Db2 connector JAR file (that is, <code>debezium-connector-db2-3.5.0.Alpha1.jar</code>).</p>
+<p>Download the <a href="https://repo1.maven.org/maven2/com/ibm/db2/jcc/11.5.0.0/jcc-11.5.0.0.jar">JDBC driver for Db2</a> from Maven Central, and extract the downloaded driver file to the directory that contains the Debezium Db2 connector JAR file (that is, <code>debezium-connector-db2-3.5.0.Beta1.jar</code>).</p>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -7027,6 +7027,28 @@ Updates every 10,000 rows scanned and upon completing a table.</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="connectors-snaps-metric-tablechunkcounts_db2"></a><a href="#connectors-snaps-metric-tablechunkcounts_db2"><code>TableChunkCounts</code></a></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>Map&lt;String, Long&gt;</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Map containing the number of chunks for each table in the snapshot when using chunk-based multithreaded snapshots.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="connectors-snaps-metric-tablechunkscompletedcounts_db2"></a><a href="#connectors-snaps-metric-tablechunkscompletedcounts_db2"><code>TableChunksCompletedCounts</code></a></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>Map&lt;String, Long&gt;</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Map containing the number of chunks that have completed for each table in the snapshot when using chunk-based multithreaded snapshots.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="connectors-snaps-metric-maxqueuesizeinbytes_db2"></a><a href="#connectors-snaps-metric-maxqueuesizeinbytes_db2"><code>MaxQueueSizeInBytes</code></a></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -7739,7 +7761,7 @@ Restart the connector to see updated column names in change events.</p>
 
 <div id="toc-rightbar"></div>    <footer class="footer">
         <div class="wrapper">
-            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/95c5504c5a7147d9f60011fc1dde5ecec47d3776">95c5504c</a></span>)
+            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/f480868fe9ed9c4d026ea84db4dc26faa71e3e62">f480868f</a></span>)
             
         </div>
     </footer>
