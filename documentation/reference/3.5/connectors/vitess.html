@@ -4,7 +4,7 @@
         <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Debezium connector for Vitess :: Debezium Documentation</title>
-    <link rel="canonical" href="https://debezium.io/documentation/reference/stable/connectors/vitess.html">
+    <link rel="canonical" href="https://debezium.io/documentation/reference/3.4/connectors/vitess.html">
     <meta name="generator" content="Antora 3.1.7">
 <link rel="stylesheet" href="../../../debezium-antora/css/site.css">
 <link rel="stylesheet" href="../../../debezium-antora/css/debezium-antora.css">
@@ -38,7 +38,7 @@
     </div>
   </nav>
 </header><div class="body">
-<div class="nav-container" data-component="reference" data-version="3.5">
+<div class="nav-container" data-component="reference" data-version="stable">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -262,6 +262,9 @@
     <a class="nav-link" href="../integrations/quarkus-debezium-engine-extension.html">Debezium Extensions for Quarkus</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../integrations/hibernate-cache.html">Hibernate Cache Invalidation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../integrations/testcontainers.html">Integration Testing with Testcontainers</a>
   </li>
 </ul>
@@ -322,14 +325,14 @@
     <li class="component is-current">
       <span class="title">Debezium Documentation</span>
       <ul class="versions">
+        <li class="version is-current">
+          <a href="/documentation/reference/3.5/index.html">3.5</a>
+        </li>
         <li class="version">
           <a href="/documentation/reference/nightly/index.html">nightly</a>
         </li>
         <li class="version">
           <a href="/documentation/reference/3.4/index.html">3.4</a>
-        </li>
-        <li class="version is-current">
-          <a href="/documentation/reference/3.5/index.html">3.5</a>
         </li>
         <li class="version">
           <a href="/documentation/reference/3.3/index.html">3.3</a>
@@ -380,7 +383,7 @@
 <main role="main" class="main">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../../stable/index.html" class="home-link"></a>
+  <a href="../../3.4/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Debezium Documentation</a></li>
@@ -393,9 +396,9 @@
     <div class="page-versions">
         <button class="version-menu-toggle versions-menu-current" title="Show other versions of page">3.5</button>
         <div class="version-menu">
+                        <a class="version is-current" href="/reference/stable/connectors/vitess.html" data-hash="true">3.5</a>
                         <a class="version" href="/documentation//reference/connectors/vitess.html" data-hash="true">nightly</a>
-                        <a class="version" href="/documentation//reference/stable/connectors/vitess.html" data-hash="true">3.4</a>
-                        <a class="version is-current" href="/reference/3.5/connectors/vitess.html" data-hash="true">3.5</a>
+                        <a class="version" href="/documentation//reference/3.4/connectors/vitess.html" data-hash="true">3.4</a>
                         <a class="version" href="/documentation//reference/3.3/connectors/vitess.html" data-hash="true">3.3</a>
                         <a class="version" href="/documentation//reference/3.2/connectors/vitess.html" data-hash="true">3.2</a>
                         <a class="version" href="/documentation//reference/3.1/connectors/vitess.html" data-hash="true">3.1</a>
@@ -455,6 +458,7 @@
 <li><a href="#vitess-topic-names">Topics names</a></li>
 <li><a href="#vitess-transaction-metadata">Transaction metadata</a></li>
 <li><a href="#vitess-ordered-transaction-metadata">Ordered Transaction Metadata</a></li>
+<li><a href="#vitess-connector-generation">Connector Generation</a></li>
 <li><a href="#vitess-efficient-transaction-metadata">Efficient Transaction Metadata</a></li>
 </ul>
 </li>
@@ -860,6 +864,45 @@ Because the <code>total_order</code> field represents the order of events within
   }
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="vitess-connector-generation"><a class="anchor" href="#vitess-connector-generation"></a>Connector Generation</h3>
+<div class="paragraph">
+<p>The Debezium Vitess connector provides a <a href="#vitess-property-connector-generation"><code>connector generation</code></a> property that stores the generation number for transaction ordering semantics.</p>
+</div>
+<div class="paragraph">
+<p>Certain connector configuration changes can affect the way that the connector computes the <code>transaction-rank</code> field.
+After you make such a change, you must increment the value of the <a href="#vitess-property-connector-generation"><code>vitess.connector.generation</code></a> property.
+Incrementing the connector generation provides the connector with the information that it needs to stream change events to Kafka from different shards in the correct sequence.</p>
+</div>
+<div class="paragraph">
+<p>For example, when you set <a href="#vitess-property-transaction-chunk-size"><code>vitess.transaction.chunk.size.bytes</code></a> to enable transaction chunking, the connector computes <code>transaction_rank</code> from the VGTID of the previous transaction, rather than the VGTID of the current transaction.
+This behavior results, because for chunked transactions, VStream behavior sends the final committed VGTID for a transaction only after it commits the final chunk of the transaction.
+Events produced before and after you enable transaction chunking therefore use different mechanisms to compute rank.
+After you enable transaction chunking, the connector uses a different mechanism to compute rank than it does when chunking is disabled.
+If you do not increment the connector epoch, consumers that process events that result from these different ranking mechanisms can incorrectly sequence events.</p>
+</div>
+<div class="paragraph">
+<div class="title">How the connector applies a generation change</div>
+<p>When the connector starts, it compares the value of the generation that is stored in the offset to the value that is configured in the <a href="#vitess-property-connector-generation"><code>vitess.connector.generation</code></a> property.
+If the generation values differ, whether the value of the configured generation is higher or lower than the stored value, the connector increments the <code>transaction_epoch</code> for all shards by one before it begins streaming.
+When you increment the transaction epoch after a configuration change, events that the connector emits afterward are associated with a later epoch than those emitted before the change.
+The epoch acts as a boundary marker that signals a shift in the connector configuration, enabling  downstream event processing frameworks to reliably distinguish between change events that occur across the transition boundary.
+Because epoch is the primary sort key in the <a href="#vitess-ordered-transaction-metadata">ordered transaction metadata</a> comparison logic, consumers can correctly identify post-change events as newer regardless of their <code>transaction_rank</code> value.</p>
+</div>
+<div class="paragraph">
+<p>Increment <code>vitess.connector.generation</code> whenever you make any of the following configuration changes that affect transaction ordering semantics:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Enabling or disabling transaction chunking  (<code>vitess.transaction.chunk.size.bytes</code>).</p>
+</li>
+<li>
+<p>Any other change that alters how <code>transaction_rank</code> is computed.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -1379,7 +1422,7 @@ It is possible to override the table&#8217;s primary key by setting the <a href=
             "email": "annek@noanswer.org"
         },
         "source": { <i class="conum" data-value="8"></i><b>(8)</b>
-            "version": "3.5.0.Beta1",
+            "version": "3.5.0.Final",
             "connector": "vitess",
             "name": "my_sharded_connector",
             "ts_ms": 1559033904000,
@@ -1551,7 +1594,7 @@ In the <code>source</code> object, <code>ts_ms</code> indicates the time that th
             "email": "annek@noanswer.org"
         },
         "source": { <i class="conum" data-value="3"></i><b>(3)</b>
-            "version": "3.5.0.Beta1",
+            "version": "3.5.0.Final",
             "connector": "vitess",
             "name": "my_sharded_connector",
             "ts_ms": 1559033904000,
@@ -1696,7 +1739,7 @@ as a primary key change. For a primary key change, in place of an <code>UPDATE</
         },
         "after": null, <i class="conum" data-value="2"></i><b>(2)</b>
         "source": { <i class="conum" data-value="3"></i><b>(3)</b>
-            "version": "3.5.0.Beta1",
+            "version": "3.5.0.Final",
             "connector": "vitess",
             "name": "my_sharded_connector",
             "ts_ms": 1559033904000,
@@ -2457,7 +2500,7 @@ Represents the number of milliseconds elapsed since the UNIX epoch, and does not
 <h2 id="vitess-deploying-a-connector"><a class="anchor" href="#vitess-deploying-a-connector"></a>Deployment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>With <a href="http://kafka.apache.org/">Kafka</a> and <a href="https://kafka.apache.org/documentation.html#connect">Kafka Connect</a> installed, the remaining tasks to deploy a Debezium Vitess connector are to download the <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-vitess/3.5.0.Beta1/debezium-connector-vitess-3.5.0.Beta1-plugin.tar.gz">connector&#8217;s plug-in archive</a>, extract the JAR files into your Kafka Connect environment, and add the directory with the JAR files to <a href="https://kafka.apache.org/documentation/#connectconfigs">Kafka Connect&#8217;s <code>plugin.path</code></a>.
+<p>With <a href="http://kafka.apache.org/">Kafka</a> and <a href="https://kafka.apache.org/documentation.html#connect">Kafka Connect</a> installed, the remaining tasks to deploy a Debezium Vitess connector are to download the <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-vitess/3.5.0.Final/debezium-connector-vitess-3.5.0.Final-plugin.tar.gz">connector&#8217;s plug-in archive</a>, extract the JAR files into your Kafka Connect environment, and add the directory with the JAR files to <a href="https://kafka.apache.org/documentation/#connectconfigs">Kafka Connect&#8217;s <code>plugin.path</code></a>.
 You then need to restart your Kafka Connect process to pick up the new JAR files.</p>
 </div>
 <div class="paragraph">
@@ -3605,6 +3648,22 @@ For more information, see <a href="#vitess-ordered-transaction-metadata">Ordered
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><a id="vitess-property-connector-generation"></a><a href="#vitess-property-connector-generation"><code>vitess.connector.generation</code></a></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p><code>0</code></p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>The generation number for transaction ordering semantics.
+When the connector starts, it compares this value against the generation stored in the Kafka Connect offset.
+If the values differ, the connector increments the <code>transaction_epoch</code> for all shards before streaming begins.
+Increment this value after you make configuration changes that affect how <code>transaction_rank</code> is computed, such as enabling or disabling transaction chunking.
+This property takes effect only when <code>transaction.metadata.factory</code> is set to <code>io.debezium.connector.vitess.pipeline.txmetadata.VitessOrderedTransactionMetadataFactory</code>.
+For more information, see <a href="#vitess-connector-generation">Connector Generation</a>.</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><a id="vitess-property-keepalive-interval-ms"></a><a href="#vitess-property-keepalive-interval-ms"><code>vitess.keepalive.interval.ms</code></a></p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
@@ -3993,7 +4052,7 @@ E.g. <code>"3"</code> will be emitted as the value instead of <code>"L"</code> i
 
 <div id="toc-rightbar"></div>    <footer class="footer">
         <div class="wrapper">
-            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/f0ef908eb8462cb53033ce5c01da7e3bd6c8df83">f0ef908e</a></span>)
+            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/8121c10495ebd57f9ea718f1f3b960174eb3a8c3">8121c104</a></span>)
             
         </div>
     </footer>

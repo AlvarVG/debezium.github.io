@@ -4,7 +4,7 @@
         <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Sending signals to a Debezium connector :: Debezium Documentation</title>
-    <link rel="canonical" href="https://debezium.io/documentation/reference/stable/configuration/signalling.html">
+    <link rel="canonical" href="https://debezium.io/documentation/reference/3.4/configuration/signalling.html">
     <meta name="generator" content="Antora 3.1.7">
 <link rel="stylesheet" href="../../../debezium-antora/css/site.css">
 <link rel="stylesheet" href="../../../debezium-antora/css/debezium-antora.css">
@@ -43,7 +43,7 @@
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
   <nav class="nav-menu">
-    <h3 class="title"><a href="../index.html">Debezium 3.4 Documentation</a></h3>
+    <h3 class="title"><a href="../index.html">Debezium 3.5 Documentation</a></h3>
 <ul class="nav-list">
   <li class="nav-item" data-depth="0">
 <ul class="nav-list">
@@ -262,6 +262,9 @@
     <a class="nav-link" href="../integrations/quarkus-debezium-engine-extension.html">Debezium Extensions for Quarkus</a>
   </li>
   <li class="nav-item" data-depth="2">
+    <a class="nav-link" href="../integrations/hibernate-cache.html">Hibernate Cache Invalidation</a>
+  </li>
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="../integrations/testcontainers.html">Integration Testing with Testcontainers</a>
   </li>
 </ul>
@@ -316,20 +319,20 @@
 <div class="nav-panel-explore" data-panel="explore">
   <div class="context">
     <span class="title">Debezium Documentation</span>
-    <span class="version">3.4</span>
+    <span class="version">3.5</span>
   </div>
   <ul class="components">
     <li class="component is-current">
       <span class="title">Debezium Documentation</span>
       <ul class="versions">
+        <li class="version is-current">
+          <a href="/documentation/reference/3.5/index.html">3.5</a>
+        </li>
         <li class="version">
           <a href="/documentation/reference/nightly/index.html">nightly</a>
         </li>
-        <li class="version is-current">
-          <a href="/documentation/reference/3.4/index.html">3.4</a>
-        </li>
         <li class="version">
-          <a href="/documentation/reference/3.5/index.html">3.5</a>
+          <a href="/documentation/reference/3.4/index.html">3.4</a>
         </li>
         <li class="version">
           <a href="/documentation/reference/3.3/index.html">3.3</a>
@@ -380,7 +383,7 @@
 <main role="main" class="main">
 <div class="toolbar" role="navigation">
 <button class="nav-toggle"></button>
-  <a href="../index.html" class="home-link"></a>
+  <a href="../../3.4/index.html" class="home-link"></a>
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="../index.html">Debezium Documentation</a></li>
@@ -391,11 +394,11 @@
     <div class="page-versions-container">
     Version:
     <div class="page-versions">
-        <button class="version-menu-toggle versions-menu-current" title="Show other versions of page">3.4</button>
+        <button class="version-menu-toggle versions-menu-current" title="Show other versions of page">3.5</button>
         <div class="version-menu">
+                        <a class="version is-current" href="/reference/stable/configuration/signalling.html" data-hash="true">3.5</a>
                         <a class="version" href="/documentation//reference/configuration/signalling.html" data-hash="true">nightly</a>
-                        <a class="version is-current" href="/reference/stable/configuration/signalling.html" data-hash="true">3.4</a>
-                        <a class="version" href="/documentation//reference/3.5/configuration/signalling.html" data-hash="true">3.5</a>
+                        <a class="version" href="/documentation//reference/3.4/configuration/signalling.html" data-hash="true">3.4</a>
                         <a class="version" href="/documentation//reference/3.3/configuration/signalling.html" data-hash="true">3.3</a>
                         <a class="version" href="/documentation//reference/3.2/configuration/signalling.html" data-hash="true">3.2</a>
                         <a class="version" href="/documentation//reference/3.1/configuration/signalling.html" data-hash="true">3.1</a>
@@ -430,13 +433,18 @@
         // Update anchors on initial load
         document.addEventListener('DOMContentLoaded', updateAnchorsWithHash);
     </script>
-  <div class="edit-this-page"><a href="https://github.com/debezium/debezium/edit/3.4/documentation/modules/ROOT/pages/configuration/signalling.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/debezium/debezium/edit/3.5/documentation/modules/ROOT/pages/configuration/signalling.adoc">Edit this Page</a></div>
   </div>
 <div class="article-grid">
 <div class="article-cell1">
 <article class="doc">
         
-    <!-- This partial is a placeholder -->            <h1 class="page">Sending signals to a Debezium connector</h1>
+    <div class="version-banner version-banner-development">
+    You are viewing documentation for the current development version of Debezium.
+    <br/>
+            If you want to view the latest stable version of this page, please go <a href=/documentation/reference/stable/index.html>here</a>.
+            
+</div>            <h1 class="page">Sending signals to a Debezium connector</h1>
         <div id="preamble">
 <div class="sectionbody">
 <div id="toc" class="toc">
@@ -839,23 +847,6 @@ After you enable the signaling channel, a Kafka consumer is created to consume s
 </li>
 </ul>
 </div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>To use Kafka signaling to trigger ad hoc incremental snapshots for most connectors, you must first <a href="#debezium-signaling-enabling-source-signaling-channel">enable a <code>source</code> signaling channel</a> in the connector configuration.
-The source channel implements a watermarking mechanism to deduplicate events that might be captured by an incremental snapshot and then captured again after streaming resumes.
-Enabling the source channel is not required when using a signaling channel to trigger an incremental snapshot of a read-only MySQL database that has <a href="../connectors/mysql.html#enable-mysql-gtids" class="xref page">GTIDs enabled</a>.
-For more information, see <a href="../connectors/mysql.html#mysql-read-only-incremental-snapshots" class="xref page">MySQL read only incremental snapshot</a></p>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="sect2">
 <h3 id="_message_format"><a class="anchor" href="#_message_format"></a>Message format</h3>
 <div class="paragraph">
@@ -1246,7 +1237,7 @@ You must include these compile dependencies in your project&#8217;s <code>pom.xm
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;io.debezium&lt;/groupId&gt;
-    &lt;artifactId&gt;debezium-core&lt;/artifactId&gt;
+    &lt;artifactId&gt;debezium-connector-common&lt;/artifactId&gt;
     &lt;version&gt;${version.debezium}&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -1329,6 +1320,23 @@ To use a custom signaling channel with multiple connectors, you must place a cop
 <p><a href="#debezium-signaling-custom-action">Custom action</a>.</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>To use signaling to trigger ad hoc incremental snapshots for most connectors, you must first <a href="#debezium-signaling-enabling-source-signaling-channel">enable a <code>source</code> signaling channel</a> in the connector configuration.
+The source channel implements a watermarking mechanism to deduplicate events that might be captured by an incremental snapshot and then captured again after streaming resumes.
+Enabling the source channel is not required when using a signaling channel to trigger an incremental snapshot of a read-only MySQL database that has <a href="../connectors/mysql.html#enable-mysql-gtids" class="xref page">GTIDs enabled</a>.
+For more information, see <a href="../connectors/mysql.html#mysql-read-only-incremental-snapshots" class="xref page">MySQL read only incremental snapshot</a></p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Some signals are not compatible with all connectors.</p>
@@ -1925,7 +1933,7 @@ Include the following compile dependencies in your project&#8217;s <code>pom.xml
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;io.debezium&lt;/groupId&gt;
-    &lt;artifactId&gt;debezium-core&lt;/artifactId&gt;
+    &lt;artifactId&gt;debezium-connector-common&lt;/artifactId&gt;
     &lt;version&gt;${version.debezium}&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -1938,7 +1946,7 @@ For example,</p>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;properties&gt;
-    &lt;version.debezium&gt;3.4.2.Final&lt;/version.debezium&gt;
+    &lt;version.debezium&gt;3.5.0.Final&lt;/version.debezium&gt;
 &lt;/properties&gt;</code></pre>
 </div>
 </div>
@@ -1989,7 +1997,7 @@ To use a custom action with multiple connectors, you must place a copy of the cu
 
 <div id="toc-rightbar"></div>    <footer class="footer">
         <div class="wrapper">
-            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/cc5b6030666bccc05c7dbddf2eaf6b76bfc04166">cc5b6030</a></span>)
+            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/8121c10495ebd57f9ea718f1f3b960174eb3a8c3">8121c104</a></span>)
             
         </div>
     </footer>

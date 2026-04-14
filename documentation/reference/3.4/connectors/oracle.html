@@ -4,7 +4,7 @@
         <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Debezium Connector for Oracle :: Debezium Documentation</title>
-    <link rel="canonical" href="https://debezium.io/documentation/reference/stable/connectors/oracle.html">
+    <link rel="canonical" href="https://debezium.io/documentation/reference/3.4/connectors/oracle.html">
     <meta name="generator" content="Antora 3.1.7">
 <link rel="stylesheet" href="../../../debezium-antora/css/site.css">
 <link rel="stylesheet" href="../../../debezium-antora/css/debezium-antora.css">
@@ -38,7 +38,7 @@
     </div>
   </nav>
 </header><div class="body">
-<div class="nav-container" data-component="reference" data-version="stable">
+<div class="nav-container" data-component="reference" data-version="3.4">
   <aside class="nav">
     <div class="panels">
 <div class="nav-panel-menu is-active" data-panel="menu">
@@ -323,13 +323,13 @@
       <span class="title">Debezium Documentation</span>
       <ul class="versions">
         <li class="version">
+          <a href="/documentation/reference/3.5/index.html">3.5</a>
+        </li>
+        <li class="version">
           <a href="/documentation/reference/nightly/index.html">nightly</a>
         </li>
         <li class="version is-current">
           <a href="/documentation/reference/3.4/index.html">3.4</a>
-        </li>
-        <li class="version">
-          <a href="/documentation/reference/3.5/index.html">3.5</a>
         </li>
         <li class="version">
           <a href="/documentation/reference/3.3/index.html">3.3</a>
@@ -393,9 +393,9 @@
     <div class="page-versions">
         <button class="version-menu-toggle versions-menu-current" title="Show other versions of page">3.4</button>
         <div class="version-menu">
+                        <a class="version" href="/documentation//reference/stable/connectors/oracle.html" data-hash="true">3.5</a>
                         <a class="version" href="/documentation//reference/connectors/oracle.html" data-hash="true">nightly</a>
-                        <a class="version is-current" href="/reference/stable/connectors/oracle.html" data-hash="true">3.4</a>
-                        <a class="version" href="/documentation//reference/3.5/connectors/oracle.html" data-hash="true">3.5</a>
+                        <a class="version is-current" href="/reference/3.4/connectors/oracle.html" data-hash="true">3.4</a>
                         <a class="version" href="/documentation//reference/3.3/connectors/oracle.html" data-hash="true">3.3</a>
                         <a class="version" href="/documentation//reference/3.2/connectors/oracle.html" data-hash="true">3.2</a>
                         <a class="version" href="/documentation//reference/3.1/connectors/oracle.html" data-hash="true">3.1</a>
@@ -436,7 +436,12 @@
 <div class="article-cell1">
 <article class="doc">
         
-    <!-- This partial is a placeholder -->            <h1 class="page">Debezium Connector for Oracle</h1>
+    <div class="version-banner version-banner-outdated">
+    You are viewing documentation for an outdated version of Debezium.
+    <br/>
+            If you want to view the latest stable version of this page, please go <a href=/documentation/reference/stable/index.html>here</a>.
+            
+</div>            <h1 class="page">Debezium Connector for Oracle</h1>
         <div id="preamble">
 <div class="sectionbody">
 <div id="toc" class="toc">
@@ -634,20 +639,6 @@ Otherwise, use the uncommitted changes mode.</p>
 </div>
 <div class="paragraph">
 <p>Enable this mode by setting the <a href="#oracle-property-database-connection-adapter"><code>database.connection.adapter</code></a> property to <code>logminer_unbuffered</code>.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>This feature is currently <strong>incubating</strong> and might change in future releases.</p>
-</div>
-</td>
-</tr>
-</table>
 </div>
 </dd>
 </dl>
@@ -1821,8 +1812,7 @@ Value = `{"type":"execute-snapshot","data": {"data-collections": ["{collection-c
 <p><code>SELECT * FROM <em>&lt;data-collection&gt;</em> WHERE <em>&lt;filter&gt;</em> &#8230;&#8203;.</code></p>
 </div>
 <div class="paragraph">
-<p>For example, given a <code>products</code> table with the columns <code>id</code> (primary key), <code>color</code>, and <code>brand</code>, if you want a snapshot to include only content for which <code>color='blue'</code>, when you request the snapshot, you could add the <code>additional-conditions</code> property to filter the content:
-:leveloffset: +1</p>
+<p>For example, given a <code>products</code> table with the columns <code>id</code> (primary key), <code>color</code>, and <code>brand</code>, if you want a snapshot to include only content for which <code>color='blue'</code>, when you request the snapshot, you could add the <code>additional-conditions</code> property to filter the content:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1833,8 +1823,7 @@ Value = `{"type":"execute-snapshot","data": {"data-collections": ["db1.schema1.p
 </div>
 <div class="paragraph">
 <p>You can also use the <code>additional-conditions</code> property to pass conditions based on multiple columns.
-For example, using the same <code>products</code> table as in the previous example, if you want a snapshot to include only the content from the <code>products</code> table for which <code>color='blue'</code>, and <code>brand='MyBrand'</code>, you could send the following request:
-:leveloffset: +1</p>
+For example, using the same <code>products</code> table as in the previous example, if you want a snapshot to include only the content from the <code>products</code> table for which <code>color='blue'</code>, and <code>brand='MyBrand'</code>, you could send the following request:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1905,8 +1894,11 @@ values ('ad-hoc-1',   <i class="conum" data-value="2"></i><b>(2)</b>
 </div>
 </div>
 <div class="paragraph">
-<p>The values of the <code>id</code>, <code>type</code>, and <code>data</code> parameters in the signal command correspond to the <a href="../configuration/signalling.html#debezium-signaling-description-of-required-structure-of-a-signaling-data-collection" class="xref page">fields of the signaling table</a>.<br>
+<p>The values of the <code>id</code>, <code>type</code>, and <code>data</code> parameters in the signal command correspond to the <a href="../configuration/signalling.html#debezium-signaling-description-of-required-structure-of-a-signaling-data-collection" class="xref page">fields of the signaling table</a>.
 The following table describes the parameters in the example:</p>
+</div>
+</li>
+</ol>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 4. Descriptions of fields in a SQL command for sending a stop incremental snapshot signal to the signaling table</caption>
@@ -1956,9 +1948,6 @@ If you do not specify a <code>type</code> value, the signal fails to stop the in
 </tr>
 </tbody>
 </table>
-</li>
-</ol>
-</div>
 </div>
 <div class="sect3">
 <h4 id="oracle-stopping-an-incremental-snapshot-kafka"><a class="anchor" href="#oracle-stopping-an-incremental-snapshot-kafka"></a>Using the Kafka signaling channel to stop an incremental snapshot</h4>
@@ -2601,7 +2590,7 @@ The message contains a logical representation of the table schema.</p>
   },
   "payload": {
     "source": {
-      "version": "3.4.2.Final",
+      "version": "3.4.3.Final",
       "connector": "oracle",
       "name": "server1",
       "ts_ms": 1588252618953,
@@ -3910,7 +3899,7 @@ This field is only present when using the LogMiner connection adapter.</p>
             "EMAIL": "annek@noanswer.org"
         },
         "source": {
-            "version": "3.4.2.Final",
+            "version": "3.4.3.Final",
             "name": "server1",
             "ts_ms": 1520085154000,
             "ts_us": 1520085154000000,
@@ -4011,7 +4000,7 @@ You can use the <a href="../configuration/avro.html#avro-serialization" class="x
             "EMAIL": "anne@example.com"
         },
         "source": {
-            "version": "3.4.2.Final",
+            "version": "3.4.3.Final",
             "name": "server1",
             "ts_ms": 1520085811000,
             "ts_us": 1520085811000000,
@@ -4114,7 +4103,7 @@ The <code>schema</code> portion of the <em>delete</em> event is identical to the
         },
         "after": null,
         "source": {
-            "version": "3.4.2.Final",
+            "version": "3.4.3.Final",
             "name": "server1",
             "ts_ms": 1520085153000,
             "ts_us": 1520085153000000,
@@ -4191,7 +4180,7 @@ The message key is <code>null</code> in this case, the message value looks like 
         "before": null,
         "after": null,
         "source": { <i class="conum" data-value="1"></i><b>(1)</b>
-            "version": "3.4.2.Final",
+            "version": "3.4.3.Final",
             "connector": "oracle",
             "name": "oracle_server",
             "ts_ms": 1638974535000,
@@ -6105,7 +6094,7 @@ For more information, see <a href="https://issues.redhat.com/browse/DBZ-8034">DB
 <div class="title">Procedure</div>
 <ol class="arabic">
 <li>
-<p>Download the Debezium <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-oracle/3.4.2.Final/debezium-connector-oracle-3.4.2.Final-plugin.tar.gz">Oracle connector plug-in archive</a>.</p>
+<p>Download the Debezium <a href="https://repo1.maven.org/maven2/io/debezium/debezium-connector-oracle/3.4.3.Final/debezium-connector-oracle-3.4.3.Final-plugin.tar.gz">Oracle connector plug-in archive</a>.</p>
 </li>
 <li>
 <p>Extract the files into your Kafka Connect environment.</p>
@@ -9424,6 +9413,8 @@ Updates every 10,000 rows scanned and upon completing a table.</p>
 <div id="oracle-monitoring-streaming" class="paragraph">
 <p>The <strong>MBean</strong> is <code>debezium.oracle:type=connector-metrics,context=streaming,server=<em>&lt;topic.prefix&gt;</em></code>.</p>
 </div>
+<div class="sect3">
+<h4 id="_common_streaming_metrics"><a class="anchor" href="#_common_streaming_metrics"></a>Common streaming metrics</h4>
 <div class="paragraph">
 <p>The following table lists the streaming metrics that are available.</p>
 </div>
@@ -9647,6 +9638,9 @@ The values will incorporate any differences between the clocks on the machines w
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="_logminer_streaming_metrics"><a class="anchor" href="#_logminer_streaming_metrics"></a>LogMiner streaming metrics</h4>
 <div class="paragraph">
 <p>The Debezium Oracle connector also provides the following additional streaming metrics:</p>
 </div>
@@ -10366,6 +10360,7 @@ This should always be <code>0</code>; however when allowing unparsable DDL to be
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="oracle-schema-history-metrics"><a class="anchor" href="#oracle-schema-history-metrics"></a>Schema History Metrics</h3>
@@ -11259,6 +11254,7 @@ sqlplus sys/top_secret@//localhost:1521/ORCLCDB as sysdba
   GRANT SET CONTAINER TO c##dbzuser CONTAINER=ALL;
   GRANT SELECT ON V_$DATABASE to c##dbzuser CONTAINER=ALL;
   GRANT FLASHBACK ANY TABLE TO c##dbzuser CONTAINER=ALL;
+  GRANT LOCK ANY TABLE TO c##dbzuser CONTAINER=ALL;
   GRANT SELECT_CATALOG_ROLE TO c##dbzuser CONTAINER=ALL;
   GRANT EXECUTE_CATALOG_ROLE TO c##dbzuser CONTAINER=ALL;
   exit;</code></pre>
@@ -11764,7 +11760,7 @@ By setting this to <code>true</code>, the connector will no longer treat all zer
 
 <div id="toc-rightbar"></div>    <footer class="footer">
         <div class="wrapper">
-            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/cc5b6030666bccc05c7dbddf2eaf6b76bfc04166">cc5b6030</a></span>)
+            <div class="copyright">Copyright &copy; 2026 Debezium Community (Rev: <span class="truncated"><a href="https://github.com/debezium/debezium/commit/2d17de5b437188219c94534b395294127443301d">2d17de5b</a></span>)
             
         </div>
     </footer>
